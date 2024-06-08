@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,9 +31,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.unitconverter.ui.theme.UnitConverterTheme
 import kotlin.math.roundToInt
 
@@ -69,7 +76,14 @@ fun UnitConverter(){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         /*there is number of text composes 1. Textfields 2. Basictextfields 3. Outlinedtextfields */
-        Text(text = "Unit Convertor")
+        Text(text = "Unit Convertor",
+            style = TextStyle(
+                color = Color.Blue,
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic
+            ))
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -133,12 +147,14 @@ fun UnitConverter(){
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Result: $useroutput $outputunit")
+        Text(text = "Result: $useroutput $outputunit",
+            style = TextStyle(
+                color = Color.Red,
+                fontFamily = FontFamily.Cursive,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic
+            )
+        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UnitConverterPreview(){
-    UnitConverter()
 }
