@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.unitconverter.ui.theme.UnitConverterTheme
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,52 +51,89 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UnitConverter(){
     var userinput by remember { mutableStateOf("") }
-    val inputvalue = userinput.toFloat() ?: 0.0
+    var useroutput by remember { mutableStateOf("") }
+    var inputunit by remember { mutableStateOf("Meters") }
+    var outputunit by remember { mutableStateOf("Meters") }
     var iexpanded by remember { mutableStateOf(false) }
     var oexpanded by remember { mutableStateOf(false) }
+    val conversionfactor = remember { mutableStateOf(1.00) }
+    val oconversionfactor = remember { mutableStateOf(1.00) }
+
+    fun convert(){
+        val inputvalue = userinput.toDoubleOrNull() ?: 0.0
+        val result = (inputvalue * conversionfactor.value * 100.0/oconversionfactor.value).roundToInt() / 100.0
+        useroutput = result.toString()
+    }
 
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         /*there is number of text composes 1. Textfields 2. Basictextfields 3. Outlinedtextfields */
         Text(text = "Unit Convertor")
+
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(value = userinput, onValueChange = {userinput= it}, label = { Text(text = "enter value")})
+
+        OutlinedTextField(value = userinput, onValueChange = {userinput= it
+            convert()}, label = { Text(text = "enter value")})
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Row {
             Box{//INPUT BOX
                 Button(onClick = {iexpanded = true}) {//INPUT BUTTON
-                    Text(text = "Select")
+                    Text(text = inputunit)
                     Icon(Icons.Default.ArrowDropDown,contentDescription="Arrow Down")
                 }
                 DropdownMenu(expanded = iexpanded, onDismissRequest = {iexpanded=false}) {
                     DropdownMenuItem(text = { Text(text = "Centimeters") },
-                        onClick = {iexpanded=false,})
-                    DropdownMenuItem(text = { Text(text = "Meters") }, onClick = {})
-                    DropdownMenuItem(text = { Text(text = "Kilometers") }, onClick = {})
-                    DropdownMenuItem(text = { Text(text = "Millimeters") }, onClick = {})
+                        onClick = {iexpanded=false
+                        inputunit = "Centimeters"
+                        conversionfactor.value = 0.01
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Meters") }, onClick = {iexpanded=false
+                        inputunit = "Meters"
+                        conversionfactor.value = 1.00
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Kilometers") }, onClick = {iexpanded=false
+                        inputunit = "Kilometers"
+                        conversionfactor.value = 1000.0
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Millimeters") }, onClick = {iexpanded=false
+                        inputunit = "Millimeters"
+                        conversionfactor.value = 0.001
+                        convert()})
                 }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(text = "to")
             Spacer(modifier = Modifier.width(16.dp))
 
             Box{
                 Button(onClick = {oexpanded=true}) {
-                    Text(text = "Select")
+                    Text(text = outputunit)
                     Icon(Icons.Default.ArrowDropDown,contentDescription="Arrow Down")
                 }
                 DropdownMenu(expanded = oexpanded, onDismissRequest = {oexpanded=false}) {
-                    DropdownMenuItem(text = { Text(text = "Centimeters") }, onClick = {})
-                    DropdownMenuItem(text = { Text(text = "Meters") }, onClick = {})
-                    DropdownMenuItem(text = { Text(text = "Kilometers") }, onClick = {})
-                    DropdownMenuItem(text = { Text(text = "Millimeters") }, onClick = {})
+                    DropdownMenuItem(text = { Text(text = "Centimeters") }, onClick = {oexpanded=false
+                        outputunit = "Centimeters"
+                        oconversionfactor.value = 0.01
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Meters") }, onClick = {oexpanded=false
+                        outputunit = "Meters"
+                        oconversionfactor.value = 1.00
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Kilometers") }, onClick = {oexpanded=false
+                        outputunit = "Kilometers"
+                        oconversionfactor.value = 1000.0
+                        convert()})
+                    DropdownMenuItem(text = { Text(text = "Millimeters") }, onClick = {oexpanded=false
+                        outputunit = "Millimeters"
+                        oconversionfactor.value = 0.001
+                        convert()})
                 }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Result")
+        Text(text = "Result: $useroutput $outputunit")
     }
 }
 
